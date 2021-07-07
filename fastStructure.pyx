@@ -62,11 +62,16 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
                 psi.square_update(g, pi)
                 # accelerated variational allele frequency update
                 pi.square_update(g, psi)
-                iter += 1
                 if iter%10==0:
                     Enew = mlhood.marginal_likelihood(g, psi, pi)
+
+                    if np.isnan(E_new): #check for nan produced
+                        E_new = E #if so reset E_new to E
+                        continue #then perform next iteration
+
                     reltol = Enew - E
                     E = Enew
+                    iter += 1
                     # update allele frequency hyperparameters
                     pi.update_hyperparam(False)
             piG = pi.copy()
@@ -137,6 +142,11 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
         if (iter+1)%10==0:
 
             E_new = mlhood.marginal_likelihood(G, psi, pi)
+
+            if np.isnan(E_new): #check for nan produced
+                E_new = E #if so reset E_new to E
+                continue #then perform next iteration
+
             reltol = E_new-E
             E = E_new
             itertime = time.time()-itertime
