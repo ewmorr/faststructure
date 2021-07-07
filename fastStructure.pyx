@@ -65,8 +65,8 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
                 if iter%10==0:
                     Enew = mlhood.marginal_likelihood(g, psi, pi)
 
-                    if np.isnan(E_new): #check for nan produced
-                        E_new = E #if so reset E_new to E
+                    if np.isnan(Enew): #check for nan produced
+                        Enew = E #if so reset E_new to E
                         continue #then perform next iteration
 
                     reltol = Enew - E
