@@ -67,6 +67,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
 
                     if np.isnan(Enew): #check for nan produced
                         Enew = E #if so reset E_new to E
+                        print "nan produced at iteration ", iter, ", g: ", g, ", psi:", psi, ", pi", pi, "\n"
                         continue #then perform next iteration
 
                     reltol = Enew - E
@@ -145,6 +146,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
 
             if np.isnan(E_new): #check for nan produced
                 E_new = E #if so reset E_new to E
+                print "nan produced at iteration ", iter, ", g: ", g, ", psi:", psi, ", pi", pi, "\n"
                 continue #then perform next iteration
 
             reltol = E_new-E
