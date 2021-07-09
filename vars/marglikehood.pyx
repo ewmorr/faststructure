@@ -25,11 +25,11 @@ def marginal_likelihood(np.ndarray[np.uint8_t, ndim=2] G, ap.AdmixProp psi, af.A
             - gammaln(pi.var_beta+pi.var_gamma) + gammaln(pi.beta+pi.gamma)).sum()
     elif pi.prior=='logistic':
         diff = digamma(pi.var_beta)-digamma(pi.var_gamma)-pi.mu
-        E3 = 0.5*pi.L*np.log(pi.Lambda).sum() - 0.5*(pi.Lambda*utils.outsum(diff**2)).sum() \
+        E3 = 0.5*pi.L*np.nan_to_num(np.log(pi.Lambda)).sum() - 0.5*(pi.Lambda*utils.outsum(diff**2)).sum() \
             - 0.5*(pi.Lambda*utils.outsum(polygamma(1,pi.var_beta)+polygamma(1,pi.var_gamma))).sum() \
-            - np.sum(utils.nplog(pi.zetabeta)+utils.nplog(pi.zetagamma)) \
-            + ((pi.var_beta>0)*gammaln(pi.var_beta) - (pi.var_beta-1)*utils.nplog(pi.zetabeta) \
-            + (pi.var_gamma>0)*gammaln(pi.var_gamma) - (pi.var_gamma-1)*utils.nplog(pi.zetagamma) \
+            - np.sum(np.nan_to_num(utils.nplog(pi.zetabeta))+np.nan_to_num(utils.nplog(pi.zetagamma))) \
+            + ((pi.var_beta>0)*gammaln(pi.var_beta) - (pi.var_beta-1)*np.nan_to_num(utils.nplog(pi.zetabeta)) \
+            + (pi.var_gamma>0)*gammaln(pi.var_gamma) - (pi.var_gamma-1)*np.nan_to_num(utils.nplog(pi.zetagamma)) \
             - gammaln(pi.var_beta+pi.var_gamma)).sum()
 
     Etotal = (E1 + E2 + E3)/float(psi.N*pi.L)
